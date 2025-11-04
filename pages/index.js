@@ -1,56 +1,28 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stage } from "@react-three/drei";
-import { useState } from "react";
+import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
+
+function CarModel() {
+  // 3D 자동차 모델 불러오기 (GLTF 형식)
+  const { scene } = useGLTF("https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@master/2.0/Car/glTF/Car.gltf");
+  return <primitive object={scene} scale={0.7} position={[0, -0.5, 0]} />;
+}
 
 export default function Home() {
-  const [finish, setFinish] = useState("Gloss");
-  const [color, setColor] = useState("#ff0000");
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-6 p-6 bg-neutral-900">
-      <h1 className="text-4xl font-bold">WrapView 3D</h1>
-      <p className="text-gray-400">Customize your car wrapping in real-time</p>
-
-      {/* 선택 메뉴 */}
-      <div className="flex gap-4">
-        <select
-          value={finish}
-          onChange={(e) => setFinish(e.target.value)}
-          className="p-2 bg-neutral-800 border border-neutral-700 rounded-lg"
-        >
-          <option value="Gloss">Gloss</option>
-          <option value="Matte">Matte</option>
-          <option value="Satin">Satin</option>
-        </select>
-
-        <input
-          type="color"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-          className="w-16 h-10 rounded"
-        />
-      </div>
-
-      {/* 3D 뷰 */}
-      <div className="w-full h-[500px] bg-neutral-800 rounded-xl">
-        <Canvas>
-          <Stage environment="city" intensity={0.6}>
-            <mesh>
-              <boxGeometry args={[2, 1, 4]} />
-              <meshStandardMaterial
-                color={color}
-                metalness={finish === "Gloss" ? 1 : 0.3}
-                roughness={finish === "Matte" ? 1 : 0.4}
-              />
-            </mesh>
-          </Stage>
-          <OrbitControls />
-        </Canvas>
-      </div>
-
-      <p className="text-gray-500 text-sm">
-        Material: {finish} | Color: {color}
+    <div className="w-screen h-screen bg-gradient-to-b from-gray-900 to-black flex flex-col items-center justify-center">
+      <h1 className="text-white text-4xl font-bold mb-4">🚗 WrapView 3D</h1>
+      <p className="text-gray-400 mb-4">Rotate & Explore the 3D Car</p>
+      <Canvas camera={{ position: [2, 1, 2], fov: 50 }}>
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[5, 5, 5]} intensity={1.5} />
+        <Environment preset="studio" />
+        <CarModel />
+        <OrbitControls enableZoom={true} />
+      </Canvas>
+      <p className="text-gray-600 mt-4 text-sm">
+        Built with React Three Fiber · BAESY2
       </p>
     </div>
   );
 }
+
