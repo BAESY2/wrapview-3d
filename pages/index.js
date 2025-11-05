@@ -1,28 +1,19 @@
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
-
-function CarModel() {
-  // 3D 자동차 모델 불러오기 (GLTF 형식)
-  const { scene } = useGLTF("https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Models@master/2.0/Car/glTF/Car.gltf");
-  return <primitive object={scene} scale={0.7} position={[0, -0.5, 0]} />;
-}
+import Head from "next/head";
+import ModelViewer from "../components/ModelViewer";
 
 export default function Home() {
   return (
-    <div className="w-screen h-screen bg-gradient-to-b from-gray-900 to-black flex flex-col items-center justify-center">
-      <h1 className="text-white text-4xl font-bold mb-4">🚗 WrapView 3D</h1>
-      <p className="text-gray-400 mb-4">Rotate & Explore the 3D Car</p>
-      <Canvas camera={{ position: [2, 1, 2], fov: 50 }}>
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[5, 5, 5]} intensity={1.5} />
-        <Environment preset="studio" />
-        <CarModel />
-        <OrbitControls enableZoom={true} />
-      </Canvas>
-      <p className="text-gray-600 mt-4 text-sm">
-        Built with React Three Fiber · BAESY2
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center">
+      <Head>
+        <title>Car Wrapping 3D Demo</title>
+      </Head>
+      <h1 className="text-3xl font-bold mb-4">🚗 Car Wrapping Visualizer</h1>
+      <p className="mb-6 text-gray-400 text-center px-4">
+        Choose materials and see your car in 3D.
       </p>
+      <ModelViewer />
     </div>
   );
 }
+
 
